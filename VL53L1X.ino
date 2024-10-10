@@ -16,7 +16,12 @@ well.
 const uint8_t sensorCount = 4;
 
 // The Arduino pin connected to the XSHUT pin of each sensor.
-const uint8_t xshutPins[sensorCount] = { 4, 5, 6, 7}
+const uint8_t xshutPins[sensorCount] = { 4, 5, 6, 7};
+// 4: back
+// 5: left
+// 6: front
+// 7: right
+
 
 VL53L1X sensors[sensorCount];
 
@@ -62,11 +67,26 @@ void setup()
 
 void loop()
 {
-  for (uint8_t i = 0; i < sensorCount; i++)
-  {
-    Serial.print(sensors[i].read());
-    if (sensors[i].timeoutOccurred()) { Serial.print(" TIMEOUT"); }
-    Serial.print('\t');
-  }
+  // Print the value for each sensor with a corresponding label
+  Serial.print("F: ");  // Front sensor
+  Serial.print(sensors[2].read());
+  if (sensors[2].timeoutOccurred()) { Serial.print(" TIMEOUT"); }
+  Serial.print('\t');
+
+  Serial.print("R: ");  // Right sensor
+  Serial.print(sensors[3].read());
+  if (sensors[3].timeoutOccurred()) { Serial.print(" TIMEOUT"); }
+  Serial.print('\t');
+
+  Serial.print("L: ");  // Left sensor
+  Serial.print(sensors[1].read());
+  if (sensors[1].timeoutOccurred()) { Serial.print(" TIMEOUT"); }
+  Serial.print('\t');
+
+  Serial.print("B: ");  // Back sensor
+  Serial.print(sensors[0].read());
+  if (sensors[0].timeoutOccurred()) { Serial.print(" TIMEOUT"); }
+  Serial.print('\t');
+
   Serial.println();
 }
