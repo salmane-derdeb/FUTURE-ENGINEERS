@@ -1,0 +1,36 @@
+import serial
+import time
+
+# Define serial port (replace with the correct port)
+serial_port = "/dev/ttyUSB0"
+baudrate = 115200  # RPLIDAR baudrate
+
+# Open the serial connection
+lidar_serial = serial.Serial(serial_port, baudrate, timeout=1)
+
+def start_scan():
+    # Start scanning command (0xA5 0x20 for express scan)
+    lidar_serial.write(b'\xA5\x20')
+    time.sleep(1)
+
+def stop_scan():
+    # Stop scanning command (0xA5 0x25)
+    lidar_serial.write(b'\xA5\x25')
+
+try:
+    start_scan()
+
+    while True:
+        # Read data from the LIDAR
+        if lidar_serial.in_waiting:
+            data = lidar_serial.read(32)  # Reading a chunk of data
+            print(data)
+            # Process the data according to RPLIDAR packet structure
+            
+        time.sleep(0.1)
+
+except KeyboardInterrupt:
+    print("Stopping LIDAR")
+    stop_scan()
+
+lidar_serial.close()
